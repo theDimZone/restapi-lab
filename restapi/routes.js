@@ -20,10 +20,10 @@ const router = app => {
     });
 
     app.post('/', (request, response) => {
-        console.log("post");
         const data = db.read();
         //const id = data.length;
-        const id = data[data.length - 1].id + 1;
+        let id = 1;
+        if(data.length > 0) id = data[data.length - 1].id + 1;
         const user = {
             id: id,
             name: request.body.name,
@@ -33,7 +33,6 @@ const router = app => {
         data.push(user)
         db.write(data);
 
-        console.log(request.body);
         response.send(user);
     });
 
@@ -42,9 +41,8 @@ const router = app => {
         const i = data.findIndex(u => u.id == request.params.id);
         data[i].name = request.body.name;
         data[i].email = request.body.email;
-        db.write(data);
 
-        console.log(request.body);
+        db.write(data);
         response.send(data[i]);
     });
 }
